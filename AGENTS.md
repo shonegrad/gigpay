@@ -30,6 +30,11 @@ real bank details; everything here is fictional by design.
 6. **Timeline component is simplified**: left rail, no dots, state color on
    the event title. Do not reintroduce `::before` dot markers or `<ol>`
    numbering.
+8. **Flush tables in cards**: a `.table-container` placed directly in a
+   `.card` (after `.card-header` or as the only child) must stay borderless
+   and square (`styles.css`: `.card > .table-container` override) — the card
+   frame supplies the border and the rounded corners. Do not give the table's
+   header row its own top radius.
 7. **Avatar menu contract**:
    - Menu shows titles only; text sections (guide/journeys/exceptions/
      controls) render inside the menu's canvas pane; sibling chips switch

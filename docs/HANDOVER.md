@@ -145,6 +145,9 @@ same simulated completion applies. Paid earnings link to their payout via
 - The payout timeline is deliberately simplified: a left rail
   (`border-left`), no bullet dots, state colors applied to the event title
   (processing/current = primary, failed = error, warning = warning).
+- A `.table-container` nested directly in a `.card` (History tables on
+  earnings overview and payouts) is borderless and square — the card frame
+  provides border and corners; tables never carry their own top radius.
 
 ## 8. Known limitations / next steps
 

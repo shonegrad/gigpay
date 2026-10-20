@@ -180,77 +180,105 @@ const diagramSiblings = {
 
 const DIAGRAM_CONTENT = {
   workflow() {
+    const step = (no, title, description, cls = "") => `
+      <div class="dg-step ${cls}">
+        <span class="dg-step-no">${no}</span>
+        <div class="dg-step-body">
+          <strong class="dg-step-title">${title}</strong>
+          <small class="dg-step-desc">${description}</small>
+        </div>
+      </div>`;
     return `
-      <div class="flowchart">
-        <div class="flow-row">
-          <span class="flow-node">Work completed</span>
-          <span class="flow-arrow">→</span>
-          <span class="flow-node">Invoice sent</span>
-          <span class="flow-arrow">→</span>
-          <span class="flow-node">Client payment collected</span>
+      <div class="diagram">
+        <div class="dg-lane">
+          <span class="dg-label">Earning</span>
+          <div class="dg-steps">
+            ${step(1, "Work completed", "Engagement finished on the marketplace")}
+            ${step(2, "Invoice sent", "Submitted to the client on the agreed terms")}
+            ${step(3, "Client payment collected", "Funds received by the platform for this job")}
+            ${step(4, "Funds credited", "Now visible in the Available balance")}
+          </div>
         </div>
-        <div class="flow-row">
-          <span class="flow-arrow">↓</span>
+        <div class="dg-lane">
+          <span class="dg-label">Payout</span>
+          <div class="dg-steps">
+            ${step(5, "Payout initiated", "Pick amount, destination, and currency mode")}
+            ${step(6, "Review approved", "Amount, rate, fee, net, and arrival check")}
+            ${step(7, "Processing", "Transfer on the way to the destination")}
+            ${step(8, "Completed", "Funds arrive — first as an estimate, then confirmed", "dg-ok")}
+          </div>
         </div>
-        <div class="flow-row">
-          <span class="flow-node">Funds credited</span>
-          <span class="flow-arrow">→</span>
-          <span class="flow-node">Payout initiated</span>
-          <span class="flow-arrow">→</span>
-          <span class="flow-node">Review<br><small>amount · rate · fee · net · arrival</small></span>
-        </div>
-        <div class="flow-row">
-          <span class="flow-arrow">↓</span>
-        </div>
-        <div class="flow-row">
-          <span class="flow-node flow-node-ok">Processing</span>
-          <span class="flow-arrow">→</span>
-          <span class="flow-node flow-node-ok">Completed → funds arrive (estimate)</span>
-        </div>
-        <p class="flow-note">Exception branches from Processing are shown in the state machine.
-          Amounts stay in the available balance until a payout completes; failed
-          transfers return them automatically.</p>
+        <p class="dg-note">Amounts stay in the Available balance until a payout completes;
+          failed transfers return them automatically. Exception branches from
+          Processing are shown in the state machine.</p>
       </div>`;
   },
   statemachine() {
     return `
-      <div class="flowchart">
-        <div class="flow-row">
-          <span class="flow-node">Initiated</span>
-          <span class="flow-arrow">→</span>
-          <span class="flow-node flow-node-ok">Processing</span>
-          <span class="flow-arrow">→</span>
-          <span class="flow-node flow-node-ok">Completed</span>
+      <div class="diagram">
+        <div class="dg-lane">
+          <span class="dg-label">Happy path</span>
+          <div class="dg-flow">
+            <span class="dg-node">Initiated</span>
+            <span class="dg-arrow">→</span>
+            <span class="dg-node dg-ok">Processing</span>
+            <span class="dg-arrow">→</span>
+            <span class="dg-node dg-ok">Completed</span>
+          </div>
         </div>
-        <div class="flow-row">
-          <span class="flow-node flow-node-warn">Under review</span>
-          <span class="flow-arrow">←</span>
-          <small class="flow-from">from Processing</small>
+        <div class="dg-branches">
+          <div class="dg-branch">
+            <div class="dg-branch-head">
+              <span class="dg-node dg-warn">Under review</span>
+              <small class="dg-from">from Processing · routine transfer checks</small>
+            </div>
+            <p class="dg-branch-note">No action needed unless asked. If the review needs
+              something, the payout says exactly what is known, what remains uncertain,
+              and the next step.</p>
+            <div class="dg-flow">
+              <span class="dg-node">info requested?</span>
+              <span class="dg-arrow">→</span>
+              <span class="dg-node">provide the info</span>
+              <span class="dg-node dg-return">→ Processing</span>
+            </div>
+          </div>
+          <div class="dg-branch">
+            <div class="dg-branch-head">
+              <span class="dg-node dg-err">Failed</span>
+              <small class="dg-from">from Processing · bank rejection or daily receiving limit</small>
+            </div>
+            <p class="dg-branch-note">The amount returns to the Available balance automatically.
+              Partial payout sends only what the destination can receive today.</p>
+            <div class="dg-flow">
+              <span class="dg-node">retry payout</span>
+              <span class="dg-node">change method</span>
+              <span class="dg-node">partial payout</span>
+              <span class="dg-node dg-return">→ Processing</span>
+            </div>
+          </div>
+          <div class="dg-branch">
+            <div class="dg-branch-head">
+              <span class="dg-node dg-err">Action needed</span>
+              <small class="dg-from">from Processing · unverified card or outdated destination details</small>
+            </div>
+            <p class="dg-branch-note">The interface asks for one specific next step at a time,
+              with the fix described in plain language.</p>
+            <div class="dg-flow">
+              <span class="dg-node">verify card</span>
+              <span class="dg-node">update details</span>
+              <span class="dg-node dg-return">→ Processing</span>
+            </div>
+          </div>
         </div>
-        <div class="flow-row">
-          <span class="flow-node flow-node-warn">Review → info requested?</span>
-          <span class="flow-arrow">→</span>
-          <span class="flow-node">provide info</span>
-          <span class="flow-arrow">→</span>
-          <span class="flow-node flow-node-ok">Processing</span>
+        <div class="dg-legend">
+          <span class="dg-node dg-ok">Processing · Completed</span>
+          <small>stable transfer states</small>
+          <span class="dg-node dg-warn">Under review</span>
+          <small>paused, inspect before acting</small>
+          <span class="dg-node dg-err">Failed · Action needed</span>
+          <small>blocked — a next step is offered</small>
         </div>
-        <div class="flow-row">
-          <span class="flow-node flow-node-err">Failed</span>
-          <span class="flow-arrow">←</span>
-          <small class="flow-from">bank rejection / limit</small>
-          <span class="flow-arrow">→</span>
-          <span class="flow-node">retry · change method · partial</span>
-        </div>
-        <div class="flow-row">
-          <span class="flow-node flow-node-err">Action needed</span>
-          <span class="flow-arrow">←</span>
-          <small class="flow-from">unverified card / outdated details</small>
-          <span class="flow-arrow">→</span>
-          <span class="flow-node">verify / update</span>
-          <span class="flow-arrow">→</span>
-          <span class="flow-node flow-node-ok">Processing</span>
-        </div>
-        <p class="flow-note">Every non-completed state names what is known, what remains
+        <p class="dg-note">Every non-completed state names what is known, what remains
           uncertain, and the next step — the same pattern the interface follows.</p>
       </div>`;
   },
@@ -834,6 +862,7 @@ document.addEventListener("click", (e) => {
     return;
   }
   if (t.dataset.diagramView) {
+    state.menuView = t.dataset.diagramView;
     go("diagram", { view: t.dataset.diagramView });
     return;
   }

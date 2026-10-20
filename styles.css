@@ -598,6 +598,13 @@ h4 { font-size: var(--font-size-lg); font-weight: var(--font-weight-semibold); l
     border-radius: var(--radius-lg);
 }
 
+/* a table container placed directly in a card is flush: the card frame
+   supplies the border and round corners */
+.card > .table-container {
+    border: none;
+    border-radius: 0;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
@@ -1746,24 +1753,107 @@ tr:hover td {
     flex-wrap: wrap;
 }
 
-/* Flow diagrams inside the menu */
-.flowchart {
+/* Flow diagrams (ND menu → diagram titles, rendered full-width) */
+.diagram {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+}
+
+.dg-lane {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.dg-label {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-muted);
+}
+
+/* numbered step chain, connected by a single vertical rail */
+.dg-steps {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: var(--space-2);
 }
 
-.flow-row {
+.dg-steps::after {
+    content: "";
+    position: absolute;
+    left: calc(var(--space-6) / 2 - 1px);
+    top: var(--space-4);
+    bottom: var(--space-4);
+    width: 2px;
+    background: var(--color-border);
+}
+
+.dg-step {
+    display: grid;
+    grid-template-columns: var(--space-6) 1fr;
+    gap: var(--space-3);
+    align-items: start;
+}
+
+.dg-step-no {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: var(--space-6);
+    height: var(--space-6);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    background: var(--color-surface);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-secondary);
+}
+
+.dg-step-body {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+    padding-top: 2px;
+}
+
+.dg-step-title {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text);
+}
+
+.dg-step-desc {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-secondary);
+}
+
+.dg-step.dg-ok .dg-step-no {
+    border-color: var(--color-success);
+    color: var(--color-success);
+    background: var(--color-success-light);
+}
+
+.dg-step.dg-ok .dg-step-title {
+    color: var(--color-success);
+}
+
+/* state nodes and transitions */
+.dg-flow {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    gap: var(--space-1);
-    row-gap: var(--space-2);
+    gap: var(--space-1) var(--space-2);
 }
 
-.flow-node {
+.dg-node {
     display: inline-block;
-    padding: var(--space-1) var(--space-2);
+    padding: var(--space-1) var(--space-3);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-full);
     background: var(--color-surface);
@@ -1771,47 +1861,91 @@ tr:hover td {
     font-weight: var(--font-weight-medium);
     color: var(--color-text);
     line-height: var(--line-height-tight);
-    text-align: left;
 }
 
-.flow-node small {
-    display: block;
-    font-weight: var(--font-weight-normal);
-    color: var(--color-text-muted);
-    font-size: var(--font-size-xs);
-}
-
-.flow-node-ok {
+.dg-node.dg-ok {
     border-color: var(--color-success);
+    background: var(--color-success-light);
     color: var(--color-success);
 }
 
-.flow-node-warn {
+.dg-node.dg-warn {
     border-color: var(--color-warning);
+    background: var(--color-warning-light);
     color: var(--color-warning);
 }
 
-.flow-node-err {
+.dg-node.dg-err {
     border-color: var(--color-error);
+    background: var(--color-error-light);
     color: var(--color-error);
 }
 
-.flow-arrow {
+.dg-node.dg-return {
+    color: var(--color-text-secondary);
+}
+
+.dg-arrow {
     color: var(--color-text-muted);
     font-size: var(--font-size-sm);
     flex-shrink: 0;
 }
 
-.flow-from {
+/* pause-and-resolve branches */
+.dg-branches {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.dg-branch {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-4);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+}
+
+.dg-branch-head {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+}
+
+.dg-branch-head .dg-from {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.dg-from {
     font-size: var(--font-size-xs);
     color: var(--color-text-muted);
 }
 
-.flow-note {
+.dg-branch-note,
+.dg-note {
+    margin: 0;
     font-size: var(--font-size-xs);
     color: var(--color-text-muted);
     line-height: var(--line-height-relaxed);
-    margin-top: var(--space-1);
+}
+
+/* color semantics legend */
+.dg-legend {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--space-2) var(--space-3);
+    align-items: center;
+    padding-top: var(--space-3);
+    border-top: 1px dashed var(--color-border);
+}
+
+.dg-legend small {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-secondary);
 }
 
 /* HTML hidden semantics win over any display rules (menu, modal, etc.) */
