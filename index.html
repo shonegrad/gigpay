@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GigPay — Earnings to Payouts</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app" id="app">
+        <!-- Navigation -->
+        <header class="header" role="banner">
+            <div class="header-content">
+                <a href="#" class="logo" aria-label="GigPay Home">
+                    <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                        <path d="M2 17l10 5 10-5"/>
+                        <path d="M2 12l10 5 10-5"/>
+                    </svg>
+                    <span class="logo-text">GigPay</span>
+                </a>
+                <nav class="main-nav" aria-label="Main navigation">
+                    <button class="nav-item active" data-screen="overview" aria-current="page">
+                        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="7" height="7" rx="1"/>
+                            <rect x="14" y="3" width="7" height="7" rx="1"/>
+                            <rect x="3" y="14" width="7" height="7" rx="1"/>
+                            <rect x="14" y="14" width="7" height="7" rx="1"/>
+                        </svg>
+                        <span>Earnings</span>
+                    </button>
+                    <button class="nav-item" data-screen="payouts">
+                        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 12V7H5V6"/>
+                            <path d="M3 14h9"/>
+                            <path d="M12 14v8"/>
+                            <path d="M5 18H3"/>
+                        </svg>
+                        <span>Payouts</span>
+                    </button>
+                    <button class="nav-item" data-screen="methods">
+                        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="5" width="20" height="14" rx="2"/>
+                            <line x1="2" y1="10" x2="22" y2="10"/>
+                        </svg>
+                        <span>Methods</span>
+                    </button>
+                    <button class="nav-item" data-screen="help">
+                        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+                            <line x1="12" y1="17" x2="12.01" y2="17"/>
+                        </svg>
+                        <span>Help</span>
+                    </button>
+                </nav>
+                <div class="header-actions">
+                    <button class="btn btn-ghost" id="currency-toggle" aria-label="Switch currency view">
+                        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="3"/>
+                            <path d="M19 12c0-1.7-1.3-3-3-3v0"/>
+                            <path d="M5 12c0 1.7 1.3 3 3 3v0"/>
+                        </svg>
+                        <span id="current-currency">USD</span>
+                    </button>
+                    <div class="user-menu">
+                        <button class="user-avatar" id="avatar-btn" aria-haspopup="true" aria-expanded="false"
+                                aria-controls="avatar-menu" aria-label="Prototype guide and controls">
+                            <span>ND</span>
+                        </button>
+                        <div class="avatar-menu" id="avatar-menu" role="dialog" aria-modal="false"
+                             aria-label="Prototype guide" hidden>
+                            <nav class="menu-nav" aria-label="Guide sections">
+                                <div class="menu-nav-group">
+                                    <span class="menu-nav-label">Guide</span>
+                                    <button class="menu-nav-item active" data-menu-view="guide" aria-current="true">What you're looking at</button>
+                                </div>
+                                <div class="menu-nav-group">
+                                    <span class="menu-nav-label">Views</span>
+                                    <button class="menu-nav-item" data-menu-view="journeys">Guided views</button>
+                                    <button class="menu-nav-item" data-menu-view="exceptions">Exception walkthroughs</button>
+                                </div>
+                                <div class="menu-nav-group">
+                                    <span class="menu-nav-label">Diagrams</span>
+                                    <button class="menu-nav-item" data-menu-view="workflow">Workflow diagram</button>
+                                    <button class="menu-nav-item" data-menu-view="statemachine">State machine</button>
+                                </div>
+                                <div class="menu-nav-group">
+                                    <span class="menu-nav-label">Controls</span>
+                                    <button class="menu-nav-item" data-menu-view="controls">Reset &amp; support</button>
+                                </div>
+                            </nav>
+                            <div class="menu-canvas">
+                                <section class="menu-view" data-menu-canvas="guide">
+                                    <h3>What you're looking at</h3>
+                                    <p class="menu-note">“GigPay” is a pseudonym for a real product inside the LiveXchange /
+                                        GigCX ecosystem. All names, amounts, rates and timelines here are fictional and
+                                        generalized to respect confidentiality.</p>
+                                    <p class="menu-note">Interactions are live: confirming a payout updates balances and
+                                        creates a trackable record. Exception actions resolve within the flow and are
+                                        simulated.</p>
+                                </section>
+                                <section class="menu-view" data-menu-canvas="journeys" hidden>
+                                    <nav class="menu-group-nav" aria-label="More in Views">
+                                        <span class="menu-group-nav-label">Views</span>
+                                        <button class="menu-group-link" data-menu-view="exceptions">Exception walkthroughs</button>
+                                    </nav>
+                                    <h3>Guided views</h3>
+                                    <ul class="avatar-links">
+                                        <li><a href="#" data-go="overview" data-nav="overview">Earnings → detail → payout</a></li>
+                                        <li><a href="#" data-go="payout-start" data-nav="payouts">Setup → review → confirm</a></li>
+                                        <li><a href="#" data-balance="EUR">Currency switch (EUR balance)</a></li>
+                                    </ul>
+                                </section>
+                                <section class="menu-view" data-menu-canvas="exceptions" hidden>
+                                    <nav class="menu-group-nav" aria-label="More in Views">
+                                        <span class="menu-group-nav-label">Views</span>
+                                        <button class="menu-group-link" data-menu-view="journeys">Guided views</button>
+                                    </nav>
+                                    <h3>Exception walkthroughs</h3>
+                                    <ul class="avatar-links">
+                                        <li><a href="#" data-earning="e-1046">Earning issue → fix &amp; resubmit invoice</a></li>
+                                        <li><a href="#" data-open-payout="po-8826">Failed transfer → retry / change method</a></li>
+                                        <li><a href="#" data-open-payout="po-8846">Daily limit → partial payout</a></li>
+                                        <li><a href="#" data-open-payout="po-8842">Outdated destination → update details</a></li>
+                                        <li><a href="#" data-open-payout="po-8819">Under review → support route</a></li>
+                                        <li><a href="#" data-open-payout="po-8844">Review → info request → resolve</a></li>
+                                        <li><a href="#" data-open-payout="po-8837">Card hold → verify card</a></li>
+                                    </ul>
+                                </section>
+                                <section class="menu-view" data-menu-canvas="controls" hidden>
+                                    <h3>Controls</h3>
+                                    <div class="menu-actions">
+                                        <button class="btn btn-secondary btn-sm" data-reset-demo>Reset demo data</button>
+                                        <button class="btn btn-secondary btn-sm" data-contact-support>Contact support (demo)</button>
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main content area -->
+        <main class="main" role="main" id="main-content" tabindex="-1">
+            <!-- Screens will be injected here -->
+        </main>
+
+        <!-- Mobile bottom nav -->
+        <nav class="bottom-nav" aria-label="Mobile navigation">
+            <button class="nav-item" data-screen="overview" aria-current="page">
+                <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7" rx="1"/>
+                    <rect x="14" y="3" width="7" height="7" rx="1"/>
+                    <rect x="3" y="14" width="7" height="7" rx="1"/>
+                    <rect x="14" y="14" width="7" height="7" rx="1"/>
+                </svg>
+                <span>Earnings</span>
+            </button>
+            <button class="nav-item" data-screen="payouts">
+                <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 12V7H5V6"/>
+                    <path d="M3 14h9"/>
+                    <path d="M12 14v8"/>
+                    <path d="M5 18H3"/>
+                </svg>
+                <span>Payouts</span>
+            </button>
+            <button class="nav-item" data-screen="methods">
+                <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="5" width="20" height="14" rx="2"/>
+                    <line x1="2" y1="10" x2="22" y2="10"/>
+                </svg>
+                <span>Methods</span>
+            </button>
+            <button class="nav-item" data-screen="help">
+                <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+                    <line x1="12" y1="17" x2="12.01" y2="17"/>
+                </svg>
+                <span>Help</span>
+            </button>
+        </nav>
+
+        <!-- Modals -->
+        <div class="modal-overlay" id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title" hidden>
+            <div class="modal" id="modal">
+                <header class="modal-header">
+                    <h2 id="modal-title"></h2>
+                    <button class="modal-close" id="modal-close" aria-label="Close modal">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <line x1="18" y1="6" x2="6" y2="18"/>
+                            <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                    </button>
+                </header>
+                <div class="modal-body" id="modal-body"></div>
+                <footer class="modal-footer" id="modal-footer"></footer>
+            </div>
+        </div>
+
+        <!-- Toast container -->
+        <div class="toast-container" id="toast-container" aria-live="polite"></div>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+# macOS
+.DS_Store
+
+# Temporary local harness files (_-prefixed by convention)
+_*
+
+# Editor cruft
+*.swp
