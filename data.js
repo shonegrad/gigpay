@@ -6,7 +6,7 @@
 
 const DATA = {
   worker: {
-    name: "Nebojsa Despotovic",
+    name: "Nadia Delgado",
     initials: "ND",
     homeCountry: "Portugal",
     defaultCurrency: "USD",

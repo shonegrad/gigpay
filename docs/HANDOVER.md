@@ -12,8 +12,8 @@ path and the interface designed for it.
 
 - "GigPay" is a **pseudonym** for a real product inside the LiveXchange / GigCX
   ecosystem. All names, amounts, rates, and timelines are fictional and
-  generalized to respect confidentiality. The demo worker is
-  **Nebojsa Despotovic** ("ND", the avatar in the header).
+  generalized to respect confidentiality. The demo worker persona —
+  **Nadia Delgado** ("ND", the avatar in the header) — is fictional.
 - Everything is **vanilla HTML/CSS/JS**. No dependencies, no build step, no
   bundler, no framework. You can open `index.html` straight from disk.
 - The demo is **semi-live**: confirming a payout really updates balances and
@@ -35,7 +35,7 @@ path and the interface designed for it.
 
 ```text
 DATA = {
-  worker: { name: "Nebojsa Despotovic", initials: "ND", ... },
+  worker: { name: "Nadia Delgado", initials: "ND", ... },
   balances: [ USD, EUR ],              // { currency, currencyName, available, pending }
   earnings: [ ... 13 items ],          // id e-XXXX, client, workPeriod, currency,
                                        // amount, status, timeline[], payoutRef (when paid)
